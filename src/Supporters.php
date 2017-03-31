@@ -159,12 +159,51 @@ class Supporters extends CallableEndpoint
      * Adds or updates a supporter into salsa.
      * @since 1.0.0
      *
-     * @param array $supporters List of supporters.
+     * @param object $supporter Supporter to add/update.
      *
      * @return mixed results
      */
     public function update(Supporter $supporter)
     {
         return $this->updateBatch([$supporter]);
+    }
+    /**
+     * Returns response of DELETE supporters endpoint.
+     * Deletes multiple supporters from salsa.
+     * @since 1.0.0
+     *
+     * @param array $supporters List of supporters.
+     *
+     * @return mixed results
+     */
+    public function deleteBatch(array $supporters)
+    {
+        $batch = array();
+        foreach ($supporters as $supporter) {
+            if (is_a($supporter, 'Salsa\Models\Supporter')
+                && $supporter->supporterId
+            )
+                $batch[] = ['supporterId' => $supporter->supporterId];
+        }
+        return $this->api->callCurl(
+            $this->endpoints['supporters'],
+            'JDELETE',
+            [
+                'payload' => ['supporters' => $batch]
+            ]
+        );
+    }
+    /**
+     * Returns response of DELETE supporters endpoint.
+     * Deletes a supporter from salsa.
+     * @since 1.0.0
+     *
+     * @param object $supporter Supporter to delete.
+     *
+     * @return mixed results
+     */
+    public function delete(Supporter $supporter)
+    {
+        return $this->deleteBatch([$supporter]);
     }
 }

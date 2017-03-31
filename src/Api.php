@@ -31,6 +31,13 @@ class Api
      */
     protected $curl;
     /**
+     * Last response got from API.
+     * RAW response
+     * @since 1.0.0
+     * @var string
+     */
+    protected $response;
+    /**
      * List of possible usage environments.
      * @since 1.0.0
      * @var array
@@ -112,9 +119,9 @@ class Api
                 break;
         }
         // Get response
-        $response = curl_exec($this->curl);
+        $this->response = curl_exec($this->curl);
         curl_close($this->curl);
-        return empty($response) ? null : json_decode($response);
+        return empty($this->response) ? null : json_decode($this->response);
     }
     /**
      * Sets curl property and its settings.
