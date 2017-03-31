@@ -8,7 +8,7 @@ use Salsa\Base\Model;
  * Salsas supporter data model.
  *
  * @author Alejandro Mostajo <info@10quality.com> 
- * @version 1.0.0
+ * @version 1.0.1
  * @package Salsa
  * @license MIT
  */
@@ -74,7 +74,24 @@ class Supporter extends Model
      */
     public function dateOfBirthTransform($value)
     {
-        // Force array
         return str_replace('+00:00', '.000Z', gmdate('c', strtotime($value)));
+    }
+    /**
+     * Returns gender valid value.
+     * @since 1.0.1
+     *
+     * @param mixed $value Value
+     *
+     * @return mixed string or null
+     */
+    public function genderTransform($value)
+    {
+        // Force array
+        return preg_match('/f|female|feme/', strtolower($value))
+            ? 'FEMALE'
+            : (preg_match('/m/', strtolower($value))
+                ? 'MALE'
+                : null
+            );
     }
 }
