@@ -2,6 +2,8 @@
 
 namespace Salsa;
 
+use Salsa\Base\Response;
+
 /**
  * Salsa's API main accessor.
  *
@@ -71,11 +73,14 @@ class Api
     }
     /**
      * Executes CURL call.
+     * Returns API response.
      * @since 1.0.0
      *
      * @param string $endPoint API endpoint to call.
      * @param string $method   Request method.
      * @param array  $data     Request data.
+     *
+     * @return Response object
      */
     public function callCurl($endPoint, $method = 'GET', $data = array())
     {
@@ -121,7 +126,7 @@ class Api
         // Get response
         $this->response = curl_exec($this->curl);
         curl_close($this->curl);
-        return empty($this->response) ? null : json_decode($this->response);
+        return new Response($this->response);
     }
     /**
      * Sets curl property and its settings.

@@ -17,7 +17,8 @@ class Metrics extends CallableEndpoint
     /**
      * Returns API metrics.
      * @since 1.0.0
-     * @return mixed results
+     *
+     * @return Salsa\Base\Response
      */
     public function get()
     {

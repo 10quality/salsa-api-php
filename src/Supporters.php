@@ -31,7 +31,7 @@ class Supporters extends CallableEndpoint
      *
      * @param array $email List of emails to search.
      *
-     * @return mixed results
+     * @return Salsa\Base\Response
      */
     public function searchByEmails(array $emails)
     {
@@ -52,7 +52,7 @@ class Supporters extends CallableEndpoint
      *
      * @param string $email Email to search.
      *
-     * @return mixed results
+     * @return Salsa\Base\Response
      */
     public function searchByEmail($email)
     {
@@ -66,7 +66,7 @@ class Supporters extends CallableEndpoint
      *
      * @param array $ids List of supporter ids to search.
      *
-     * @return mixed results
+     * @return Salsa\Base\Response
      */
     public function searchByIDs(array $ids)
     {
@@ -87,7 +87,7 @@ class Supporters extends CallableEndpoint
      *
      * @param string $id Supporter ID to search.
      *
-     * @return mixed results
+     * @return Salsa\Base\Response
      */
     public function searchByID($id)
     {
@@ -101,7 +101,7 @@ class Supporters extends CallableEndpoint
      *
      * @param array $ids List of supporter external ids to search.
      *
-     * @return mixed results
+     * @return Salsa\Base\Response
      */
     public function searchByExternalIDs(array $ids)
     {
@@ -122,7 +122,7 @@ class Supporters extends CallableEndpoint
      *
      * @param string $id Supporter external ID to search.
      *
-     * @return mixed results
+     * @return Salsa\Base\Response
      */
     public function searchByExternalID($id)
     {
@@ -137,7 +137,7 @@ class Supporters extends CallableEndpoint
      *
      * @param array $supporters List of supporters.
      *
-     * @return mixed results
+     * @return Salsa\Base\Response
      */
     public function updateBatch(array $supporters)
     {
@@ -161,7 +161,7 @@ class Supporters extends CallableEndpoint
      *
      * @param object $supporter Supporter to add/update.
      *
-     * @return mixed results
+     * @return Salsa\Base\Response
      */
     public function update(Supporter $supporter)
     {
@@ -174,7 +174,7 @@ class Supporters extends CallableEndpoint
      *
      * @param array $supporters List of supporters.
      *
-     * @return mixed results
+     * @return Salsa\Base\Response
      */
     public function deleteBatch(array $supporters)
     {
@@ -200,7 +200,7 @@ class Supporters extends CallableEndpoint
      *
      * @param object $supporter Supporter to delete.
      *
-     * @return mixed results
+     * @return Salsa\Base\Response
      */
     public function delete(Supporter $supporter)
     {

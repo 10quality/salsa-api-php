@@ -54,7 +54,11 @@ abstract class Model
      */
     public function __set($property, $value)
     {
-        $this->attributes[$property] = $value;
+        if ($property === 'attributes') {
+            $this->attributes = $value;
+        } else {
+            $this->attributes[$property] = $value;
+        }
     }
     /**
      * Returns model as a valid array.
