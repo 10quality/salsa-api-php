@@ -4,6 +4,7 @@ namespace Salsa;
 
 use Exception;
 use Salsa\Base\CallableEndpoint;
+use Salsa\Models\Supporter;
 
 /**
  * Supporter(S) endpoint accessor.
@@ -13,7 +14,7 @@ use Salsa\Base\CallableEndpoint;
  * @package Salsa
  * @license MIT
  */
-class Supporter extends CallableEndpoint
+class Supporters extends CallableEndpoint
 {
     /**
      * List of available endpoits for supporter(s) calls.
@@ -128,5 +129,42 @@ class Supporter extends CallableEndpoint
         if (!is_string($id))
             throw new Exception('Supporter ID parameter should be a string value.');
         return $this->searchByExternalIDs([$id]);
+    }
+    /**
+     * Returns response of PUT supporters endpoint.
+     * Adds or updates multiple supporters into salsa.
+     * @since 1.0.0
+     *
+     * @param array $supporters List of supporters.
+     *
+     * @return mixed results
+     */
+    public function updateBatch(array $supporters)
+    {
+        $batch = array();
+        foreach ($supporters as $supporter) {
+            if (is_a($supporter, 'Salsa\Models\Supporter'))
+                $batch[] = $supporter->toArray();
+        }
+        return $this->api->callCurl(
+            $this->endpoints['supporters'],
+            'JPUT',
+            [
+                'payload' => ['supporters' => $batch]
+            ]
+        );
+    }
+    /**
+     * Returns response of PUT supporters endpoint.
+     * Adds or updates a supporter into salsa.
+     * @since 1.0.0
+     *
+     * @param array $supporters List of supporters.
+     *
+     * @return mixed results
+     */
+    public function update(Supporter $supporter)
+    {
+        return $this->updateBatch([$supporter]);
     }
 }
