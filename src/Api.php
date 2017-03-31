@@ -67,9 +67,10 @@ class Api
      * @since 1.0.0
      *
      * @param string $endPoint API endpoint to call.
-     * @param array  $fields   Post fields.
+     * @param string $method   Request method.
+     * @param array  $data     Request data.
      */
-    public function callCurl($endPoint, $fields = array())
+    public function callCurl($endPoint, $method = 'GET', $data = array())
     {
         // Begin
         $this->setCurl();
@@ -85,10 +86,31 @@ class Api
                 )
             ).$endPoint
         );
-        // Set POST/GET
-        curl_setopt($this->curl, CURLOPT_POST, count($fields) > 0 ? 1 : 0);
-        if (count($fields) > 0)
-            curl_setopt($this->curl, CURLOPT_POSTFIELDS, http_build_query($fields));
+        // Set method
+        switch ($method) {
+            case 'GET':
+                curl_setopt($this->curl, CURLOPT_POST, 0);
+                break;
+            case 'POST':
+                curl_setopt($this->curl, CURLOPT_POST, 1);
+                if (count($data) > 0)
+                    curl_setopt($this->curl, CURLOPT_POSTFIELDS, http_build_query($data));
+                break;
+            case 'JPOST':
+            case 'JPUT':
+            case 'JGET':
+            case 'JDELETE':
+                $json = json_encode($data);                                     
+                curl_setopt($this->curl, CURLOPT_CUSTOMREQUEST, preg_replace('/J/', '', $method, -1));
+                curl_setopt($this->curl, CURLOPT_POSTFIELDS, $json);
+                // Rewrite headers
+                curl_setopt($this->curl, CURLOPT_HTTPHEADER, array(
+                    'Content-Type: application/json',
+                    'Content-Length: '.strlen($json),
+                    'authToken: '.$this->settings['token'],
+                ));     
+                break;
+        }
         // Get response
         $response = curl_exec($this->curl);
         curl_close($this->curl);

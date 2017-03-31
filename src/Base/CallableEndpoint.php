@@ -21,6 +21,12 @@ abstract class CallableEndpoint implements CallableInterface
      */
     protected $api;
     /**
+     * List of available endpoints in callable class.
+     * @since 1.0.0
+     * @var array 
+     */
+    protected $endpoints = array();
+    /**
      * Default constructor should always require an API instace as parameter.
      * @since 1.0.0
      *
