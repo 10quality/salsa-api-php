@@ -50,7 +50,7 @@ class Supporter extends Model
     public function &__get($property)
     {
         if (isset($this->customFields[$property]))
-            return $this->customFields[$property];
+            return $this->customFields[$property]['value'];
         return parent::__get($property);
     }
     /**
@@ -227,7 +227,7 @@ class Supporter extends Model
                 return str_replace('+00:00', '.000Z', gmdate('c', strtotime($value)));
             case 'BOOL':
             case 'BOOLEAN':
-                return (is_string($value) && $value == 'true') || $value ? true : false;
+                return (is_string($value) && $value === 'true') || $value ? true : false;
         }
         return $value;
     }
