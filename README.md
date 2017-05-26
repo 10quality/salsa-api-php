@@ -87,6 +87,17 @@ $supporter->address = [
     'country' => 'US',
 ];
 $supporter->dateOfBirth = '2017-01-01';
+// Phones
+$supporter->cellphone = '1234567890';
+$supporter->workphone = '1234567890';
+$supporter->homephone = '1234567890';
+// Custom fields
+$supporter->addCustomField(
+    null, // Field ID
+    'Nickname', // Field Name
+    'Piru', // Value
+    null // Type
+);
 
 // Add supporter
 $response = $endpoint->update($supporter);
@@ -99,6 +110,8 @@ $response = $endpoint->updateBatch([$supporter, $supporter2]);
 ```
 
 **NOTE:** Supporter models must include property `supporterId` in order to be updated.
+
+**NOTE:** Custom fields types: STRING, NUMBER, DATE, TIMESTAMP, BOOL.
 
 Next sample shows how to delete an existint supporter:
 ```php
