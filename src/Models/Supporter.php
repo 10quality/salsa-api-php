@@ -136,12 +136,12 @@ class Supporter extends Model
             throw new Exception('Custom field can not be added without an ID or a name.');
         if (is_array($value))
             throw new Exception('Array value as custom field is not supported.');
-        $key = $fieldID ? $fieldID : lcfirst(preg_replace('/\s+/', '', $name));
+        $key = $name ? lcfirst(preg_replace('/[\s\.\?\@\-\_]+/', '', $name)) : $fieldID;
         $this->customFields[$key] = array(
             'fieldID'   => $fieldID,
             'name'      => $name,
             'value'     => $this->evalCustomField($value, $type),
-            'property'  => $name ? lcfirst(preg_replace('/\s+/', '', $name)) : uniqid(),
+            'property'  => $name ? lcfirst(preg_replace('/[\s\.\?\@\-\_]+/', '', $name)) : uniqid(),
         );
     }
     /**
@@ -215,11 +215,10 @@ class Supporter extends Model
      */
     private function evalCustomField($value, $type = null)
     {
-        if ($type === null) {
+        if ($type === null)
             $type = is_bool($value) || $value === 'true' || $value === 'false'
                 ? 'BOOL'
                 : 'STRING';
-        }
         switch ($type) {
             case 'DATE':
             case 'DATETIME':
@@ -228,8 +227,7 @@ class Supporter extends Model
                 return str_replace('+00:00', '.000Z', gmdate('c', strtotime($value)));
             case 'BOOL':
             case 'BOOLEAN':
-            case 'CHECKBOX':
-                return $value ? true : false;
+                return (is_string($value) && $value == 'true') || $value ? true : false;
         }
         return $value;
     }

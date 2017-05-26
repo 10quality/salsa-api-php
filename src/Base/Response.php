@@ -8,7 +8,7 @@ use Salsa\Models\Supporter;
  * Response class.
  *
  * @author Alejandro Mostajo <info@10quality.com> 
- * @version 1.0.0
+ * @version 1.0.1
  * @package Salsa
  * @license MIT
  */
@@ -35,6 +35,7 @@ class Response
     /**
      * Returns property.
      * @since 1.0.0
+     * @since 1.0.1 Support for phones and custom fields.
      *
      * @param string $property Property name.
      *
@@ -54,7 +55,31 @@ class Response
                             continue;
                         $supporter = new Supporter;
                         $supporter->attributes = $attributes;
-                        $supporter->email = $attributes['contacts'][0]->value;
+                        foreach ($attributes['contacts'] as $contact) {
+                            switch ($contact->type) {
+                                case 'EMAIL':
+                                    $supporter->email = $contact->value;
+                                    break;
+                                case 'CELL_PHONE':
+                                    $supporter->cellphone = $contact->value;
+                                    break;
+                                case 'WORK_PHONE':
+                                    $supporter->workphone = $contact->value;
+                                    break;
+                                case 'HOME_PHONE':
+                                    $supporter->homephone = $contact->value;
+                                    break;
+                            }
+                        }
+                        if (isset($attributes['customFieldValues']))
+                            foreach ($attributes['customFieldValues'] as $field) {
+                                $supporter->addCustomField(
+                                    $field->fieldId,
+                                    $field->name,
+                                    $field->value,
+                                    $field->type
+                                );
+                            }
                         $output[] = $supporter;
                     }
                     return $output;
